@@ -9,15 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lilita+One&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
     html, body {
       overflow-x: hidden;
       height: 100%;
     }
+
     body {
       font-family: 'Lilita One', sans-serif;
       background-color: #0a0a0a;
@@ -25,6 +27,7 @@
       display: flex;
       min-height: 100vh;
     }
+
     .sidebar {
       width: 250px;
       background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
@@ -37,6 +40,7 @@
       height: 100vh;
       z-index: 100;
     }
+
     .logo {
       color: #ff5500;
       font-family: 'Bungee', sans-serif;
@@ -44,17 +48,20 @@
       text-align: center;
       margin-bottom: 25px;
     }
+
     .welcome-message {
       text-align: center;
       font-size: 1.4rem;
       margin-bottom: 25px;
     }
+
     .social-links {
       display: flex;
       flex-direction: column;
       gap: 12px;
       width: 100%;
     }
+
     .social-link {
       color: #ff5500;
       text-decoration: none;
@@ -62,7 +69,6 @@
       border-radius: 8px;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
       gap: 12px;
       background-color: rgba(255, 85, 0, 0.1);
       border: 1px solid rgba(255, 85, 0, 0.3);
@@ -70,11 +76,13 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
+
     .social-link:hover, .social-link.active {
       background-color: rgba(255, 85, 0, 0.3);
       transform: scale(1.02);
       box-shadow: 0 0 15px rgba(255, 85, 0, 0.5);
     }
+
     .logout-btn {
       margin-top: auto;
       background: rgba(255, 85, 0, 0.2);
@@ -85,18 +93,19 @@
       font-size: 1.2rem;
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
       width: 100%;
       border: none;
       transition: all 0.3s ease;
     }
+
     .logout-btn:hover {
       background: rgba(255, 85, 0, 0.3);
     }
+
     .main-content {
       flex: 1;
-      padding: 40px;
+      padding: 30px;
       margin-left: 250px;
       display: flex;
       flex-direction: column;
@@ -106,13 +115,14 @@
       min-height: 100vh;
       width: calc(100% - 250px);
     }
+
     .intro-content {
       max-width: 800px;
-      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     h1 {
       font-family: 'Bungee', sans-serif;
       color: #ff5500;
@@ -120,39 +130,83 @@
       margin-bottom: 30px;
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
+
     p {
       color: #ddd;
-      max-width: 700px;
       font-size: 1.6rem;
       margin-bottom: 25px;
       line-height: 1.5;
     }
+
     #media-container {
       display: none;
-      width: 100%;
-      max-width: 800px;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 20px 0;
       text-align: center;
-    }
-    .embed-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       width: 100%;
-      margin: 0 auto 20px;
+      height: auto;
       overflow: hidden;
-      background: transparent;
     }
+
+    .embed-container {
+      width: 100%;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    /* Instagram - Ajustes específicos */
+    #instagram-embed {
+      overflow: hidden;
+    }
+    
+    #instagram-embed .elfsight-app {
+      width: 100% !important;
+      min-width: 300px !important;
+      height: 480px !important;
+      border: none !important;
+      background: transparent !important;
+      overflow: hidden !important;
+    }
+
+    /* YouTube - Ajustes específicos para tamanho compacto */
+    #youtube-embed {
+      width: 100%;
+      max-width: 640px;
+    }
+    
+    #youtube-embed .elfsight-app {
+      width: 100% !important;
+      height: 360px !important;
+      border: none !important;
+      background: transparent !important;
+    }
+
+    /* Facebook - Mantido como estava */
+    #facebook-embed iframe {
+      width: 100% !important;
+      max-width: 500px;
+      height: 500px !important;
+      border: none;
+      background: transparent;
+      display: block;
+      margin: 0 auto;
+    }
+
     .buttons-container {
       display: flex;
       gap: 15px;
-      margin-top: 20px;
+      margin: 15px 0;
       justify-content: center;
       width: 100%;
+      flex-wrap: wrap;
+      position: relative;
     }
+
     .action-btn {
       font-size: 1.2rem;
       background: rgba(255, 85, 0, 0.15);
@@ -163,88 +217,44 @@
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      text-align: center;
+      white-space: nowrap;
+      font-family: 'Lilita One', sans-serif;
     }
+
     .action-btn:hover {
       background: rgba(255, 85, 0, 0.3);
       transform: translateY(-2px);
     }
-    
-    /* Instagram - Widget Elfsight */
-    #instagram-embed {
-      width: 100%;
-      min-height: 500px;
-      display: flex;
-      justify-content: center;
-    }
-    #instagram-embed .elfsight-app {
-      width: 100% !important;
-      height: 500px !important;
-      max-width: 800px !important;
-      margin: 0 auto !important;
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent !important;
-    }
-    
-    /* Facebook */
-    #facebook-embed {
-      width: 100%;
-      height: 500px;
-      overflow-y: auto;
-      display: flex;
-      justify-content: center;
-    }
-    #facebook-embed iframe {
-      width: 500px !important;
-      height: 500px !important;
-      border: none;
-      background: transparent;
-    }
-    
-    /* YouTube - Widget Elfsight - AJUSTADO */
-    #youtube-embed {
-      width: 100%;
-      min-height: 450px; /* Reduzido de 600px */
-      display: flex;
-      justify-content: center;
-    }
-    #youtube-embed .elfsight-app {
-      width: 100% !important;
-      height: 450px !important; /* Reduzido de 600px */
-      max-width: 700px !important; /* Reduzido de 800px */
-      margin: 0 auto !important;
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent !important;
-    }
-    
-    /* Responsividade */
+
     @media (max-width: 768px) {
-      .sidebar { 
-        width: 100%; 
-        position: relative; 
-        height: auto; 
-        border-right: none; 
-        border-bottom: 4px solid #ff5500; 
+      .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+        border-bottom: 4px solid #ff5500;
+        border-right: none;
       }
-      .main-content { 
-        margin-left: 0; 
-        padding: 25px;
-        width: 100%; 
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+        width: 100%;
       }
-      #media-container {
-        max-width: 100%;
-      }
-      #instagram-embed .elfsight-app,
-      #youtube-embed .elfsight-app {
+
+      /* Ajuste para mobile */
+      #instagram-embed .elfsight-app {
         height: 400px !important;
       }
-      #facebook-embed iframe {
-        width: 100% !important;
-        max-width: 500px;
-        height: 500px !important;
+
+      #youtube-embed .elfsight-app {
+        height: 250px !important;
+        max-width: 100% !important;
       }
+
+      #facebook-embed iframe {
+        height: 400px !important;
+      }
+
       .buttons-container {
         flex-direction: column;
         gap: 10px;
@@ -253,7 +263,6 @@
   </style>
 </head>
 <body>
-  <!-- Loading Spinner -->
   <div class="loading">
     <i class="fas fa-spinner fa-spin fa-3x" style="color: #ff5500;"></i>
   </div>
@@ -271,7 +280,6 @@
     <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
   </div>
 
-  <!-- INTRO -->
   <div class="main-content" id="intro-text">
     <div class="intro-content">
       <h1>Bem vindo(a)</h1>
@@ -280,65 +288,59 @@
     </div>
   </div>
 
-  <!-- EMBEDS -->
   <div class="main-content" id="media-container">
-    <!-- Instagram - Widget Elfsight -->
     <div class="embed-container" id="instagram-embed">
       <div class="elfsight-app-8a6b2eaa-914f-403f-888a-857af6fc055b" data-elfsight-app-lazy></div>
     </div>
-    
-    <!-- Facebook -->
     <div class="embed-container" id="facebook-embed">
-      <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FReporteres1&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" frameborder="0" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+      <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FReporteres1&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" frameborder="0" scrolling="no" allowfullscreen></iframe>
     </div>
-    
-    <!-- YouTube - Widget Elfsight -->
     <div class="embed-container" id="youtube-embed">
       <div class="elfsight-app-dc1eb651-cb92-45d1-8af7-fe925ea5b2b1" data-elfsight-app-lazy></div>
     </div>
 
-    <!-- Botões -->
     <div class="buttons-container">
-      <a href="#" id="see-more-link" class="action-btn" target="_blank">Ver mais</a>
-      <button class="action-btn" onclick="showIntro()">Voltar ao início</button>
+      <a href="#" id="see-more-link" class="action-btn" target="_blank">Ver mais no Instagram</a>
+      <button class="action-btn" onclick="showIntro()">Voltar ao Início</button>
     </div>
   </div>
 
-  <!-- Scripts Elfsight -->
+  <!-- Script Elfsight -->
   <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-
   <script>
-    // Links "Ver mais" para cada rede social
     const seeMoreLinks = {
       instagram: 'https://www.instagram.com/reporteresemacao/',
       facebook: 'https://www.facebook.com/Reporteres1',
       youtube: 'https://www.youtube.com/@reporteresemacao6982'
     };
-    
+
     let currentEmbed = null;
 
-    document.addEventListener('DOMContentLoaded', function() {
-      // Logout
-      document.getElementById('logoutBtn').addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('logoutBtn').addEventListener('click', function () {
         alert('Você foi desconectado com sucesso!');
       });
-      
-      // Remove loading
+
       setTimeout(() => {
         document.querySelector('.loading').style.display = 'none';
       }, 1000);
-      
-      // Configura atualização automática do Elfsight
+
+      // Configuração do Elfsight
       if (window.Elfsight) {
         window.Elfsight.config = {
           widgets: {
             reload: {
               enable: true,
-              interval: 300000, // 5 minutos
+              interval: 300000,
               pauseOnHover: true
             }
           }
         };
+        
+        // Forçar carregamento dos widgets
+        setTimeout(() => {
+          window.Elfsight.initializeWidgets();
+        }, 1500);
       }
     });
 
@@ -349,25 +351,26 @@
       document.getElementById(id + '-embed').style.display = 'flex';
       document.querySelectorAll('.social-link').forEach(el => el.classList.remove('active'));
       if (element) element.classList.add('active');
-      
-      // Atualiza o link "Ver mais"
+
       const seeMoreLink = document.getElementById('see-more-link');
       seeMoreLink.href = seeMoreLinks[id];
       seeMoreLink.innerHTML = `Ver mais no ${element.textContent.trim()}`;
-      
+
       currentEmbed = id;
       
-      // Forçar recarregamento dos widgets
+      // Recarregar widgets quando alternar entre abas
       if (window.Elfsight) {
-        window.Elfsight.initializeWidgets();
+        setTimeout(() => {
+          window.Elfsight.initializeWidgets();
+        }, 300);
       }
     }
 
-    function showIntro() {
+    function showIntro(element) {
       document.getElementById('intro-text').style.display = 'flex';
       document.getElementById('media-container').style.display = 'none';
       document.querySelectorAll('.social-link').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.social-link')[0].classList.add('active');
+      if (element) element.classList.add('active');
     }
   </script>
 </body>
