@@ -49,12 +49,6 @@
       margin-bottom: 25px;
     }
 
-    .welcome-message {
-      text-align: center;
-      font-size: 1.4rem;
-      margin-bottom: 25px;
-    }
-
     .social-links {
       display: flex;
       flex-direction: column;
@@ -114,6 +108,7 @@
       text-align: center;
       min-height: 100vh;
       width: calc(100% - 250px);
+      max-width: 100%;
     }
 
     .intro-content {
@@ -121,31 +116,35 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%;
     }
 
     h1 {
       font-family: 'Bungee', sans-serif;
       color: #ff5500;
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 30px;
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     p {
       color: #ddd;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       margin-bottom: 25px;
       line-height: 1.5;
+      width: 100%;
     }
 
     #media-container {
       display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 20px 0;
+      justify-content: center;
+      padding: 20px;
       text-align: center;
       width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
       height: auto;
       overflow: hidden;
     }
@@ -159,31 +158,16 @@
       flex-direction: column;
     }
 
-    /* Instagram - Ajustes específicos */
-    #instagram-embed {
-      overflow: hidden;
-    }
-    
-    #instagram-embed .elfsight-app {
-      width: 100% !important;
-      min-width: 300px !important;
-      height: 480px !important;
-      border: none !important;
-      background: transparent !important;
-      overflow: hidden !important;
-    }
-
-    /* YouTube - Ajustes específicos para tamanho compacto */
-    #youtube-embed {
+    /* Instagram - Embed Oficial */
+    .instagram-embed {
       width: 100%;
-      max-width: 640px;
-    }
-    
-    #youtube-embed .elfsight-app {
-      width: 100% !important;
-      height: 360px !important;
-      border: none !important;
-      background: transparent !important;
+      max-width: 500px;
+      height: 600px;
+      border: none;
+      overflow: hidden;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border-left: 3px solid #ff5500;
     }
 
     /* Facebook - Mantido como estava */
@@ -197,6 +181,49 @@
       margin: 0 auto;
     }
 
+    /* YouTube - Solução Definitiva */
+    .youtube-alt-container {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border-left: 3px solid #ff5500;
+    }
+    
+    .youtube-alt-image {
+      width: 100%;
+      max-height: 280px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      border: 2px solid #ff5500;
+      object-fit: cover;
+    }
+    
+    .youtube-alt-btn {
+      display: inline-block;
+      background: #ff0000;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-family: 'Lilita One', sans-serif;
+      font-size: 1.1rem;
+    }
+    
+    .youtube-alt-btn:hover {
+      background: #cc0000;
+      transform: translateY(-2px);
+    }
+    
+    .youtube-alt-btn i {
+      margin-right: 8px;
+    }
+
     .buttons-container {
       display: flex;
       gap: 15px;
@@ -204,7 +231,6 @@
       justify-content: center;
       width: 100%;
       flex-wrap: wrap;
-      position: relative;
     }
 
     .action-btn {
@@ -237,22 +263,40 @@
 
       .main-content {
         margin-left: 0;
-        padding: 20px;
+        padding: 15px;
         width: 100%;
       }
 
-      /* Ajuste para mobile */
-      #instagram-embed .elfsight-app {
-        height: 400px !important;
+      h1 {
+        font-size: 2rem;
+      }
+      
+      p {
+        font-size: 1.2rem;
       }
 
-      #youtube-embed .elfsight-app {
-        height: 250px !important;
-        max-width: 100% !important;
+      /* Instagram */
+      .instagram-embed {
+        height: 500px;
       }
 
+      /* Facebook */
       #facebook-embed iframe {
         height: 400px !important;
+      }
+
+      /* YouTube */
+      .youtube-alt-container {
+        padding: 15px;
+      }
+      
+      .youtube-alt-image {
+        max-height: 180px;
+      }
+      
+      .youtube-alt-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
       }
 
       .buttons-container {
@@ -269,7 +313,6 @@
 
   <div class="sidebar">
     <div class="logo">A Voz dos Eventos</div>
-    <div class="welcome-message">Bem-vindo, <span id="userName">Teste 001</span>!</div>
     <div class="social-links">
       <div class="social-link active" onclick="showIntro(this)"><i class="fas fa-home"></i> Início</div>
       <div class="social-link" onclick="showEmbed('instagram', this)"><i class="fab fa-instagram"></i> Instagram</div>
@@ -282,66 +325,78 @@
 
   <div class="main-content" id="intro-text">
     <div class="intro-content">
-      <h1>Bem vindo(a)</h1>
-      <p>Aqui você pode acompanhar de forma fácil as últimas publicações e novidades das redes sociais oficiais!</p>
-      <p>Navegue pelas redes sociais na barra lateral para acompanhar as últimas novidades.</p>
+      <h1>BEM VINDO(A)</h1>
+      
+      <p>Portal desenvolvido como Projeto Integrador para centralizar a comunicação digital <br>
+      integrando todas as redes sociais em uma única plataforma acessível.</p>
+      
+      <p>Aqui você pode acompanhar de forma fácil as últimas publicações<br>
+      e novidades das redes sociais oficiais do Reportéres em Ação!</p>
+      
+      <p>Navegue pelas redes sociais na barra lateral<br>
+      para acompanhar as últimas novidades.</p>
     </div>
   </div>
 
   <div class="main-content" id="media-container">
+    <!-- Instagram - Embed Oficial -->
     <div class="embed-container" id="instagram-embed">
-      <div class="elfsight-app-8a6b2eaa-914f-403f-888a-857af6fc055b" data-elfsight-app-lazy></div>
+      <iframe class="instagram-embed" 
+              src="https://www.instagram.com/reporteresemacao/embed" 
+              allowtransparency="true" 
+              frameborder="0">
+      </iframe>
     </div>
+    
+    <!-- Facebook - Mantido como estava -->
     <div class="embed-container" id="facebook-embed">
       <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FReporteres1&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" frameborder="0" scrolling="no" allowfullscreen></iframe>
     </div>
+    
+    <!-- YouTube - Solução Definitiva com sua imagem -->
     <div class="embed-container" id="youtube-embed">
-      <div class="elfsight-app-dc1eb651-cb92-45d1-8af7-fe925ea5b2b1" data-elfsight-app-lazy></div>
+      <div class="youtube-alt-container">
+        <img src="https://yt3.googleusercontent.com/ijlNB-dfRHXlAN8wK1RKq5LO2Y9AG9tyNvATAHhUVZ-xNqDgl0mmmO8LWowGF-BVodQ9d7rNig=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" 
+             class="youtube-alt-image" 
+             onclick="window.open('https://www.youtube.com/@reporteresemacao6982/featured', '_blank')"
+             alt="Canal Reporteres em Ação no YouTube">
+        <a href="https://www.youtube.com/@reporteresemacao6982/featured" 
+           target="_blank" 
+           class="youtube-alt-btn">
+          <i class="fab fa-youtube"></i> Acessar Canal no YouTube
+        </a>
+        <p style="margin-top: 15px; color: #ddd;">Clique na imagem ou no botão para acessar o canal completo</p>
+      </div>
     </div>
 
     <div class="buttons-container">
-      <a href="#" id="see-more-link" class="action-btn" target="_blank">Ver mais no Instagram</a>
+      <a href="https://www.instagram.com/reporteresemacao/" id="see-more-link" class="action-btn" target="_blank">Ver mais no Instagram</a>
       <button class="action-btn" onclick="showIntro()">Voltar ao Início</button>
     </div>
   </div>
 
-  <!-- Script Elfsight -->
-  <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
   <script>
     const seeMoreLinks = {
       instagram: 'https://www.instagram.com/reporteresemacao/',
       facebook: 'https://www.facebook.com/Reporteres1',
-      youtube: 'https://www.youtube.com/@reporteresemacao6982'
+      youtube: 'https://www.youtube.com/@reporteresemacao6982/featured'
     };
 
     let currentEmbed = null;
 
     document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('logoutBtn').addEventListener('click', function () {
-        alert('Você foi desconectado com sucesso!');
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        // Redireciona para a página de login (index.html)
+        window.location.href = "index.html";
+        
+        // Opcional: Limpar dados de sessão/localStorage se necessário
+        // localStorage.removeItem('token');
+        // sessionStorage.clear();
       });
 
       setTimeout(() => {
         document.querySelector('.loading').style.display = 'none';
       }, 1000);
-
-      // Configuração do Elfsight
-      if (window.Elfsight) {
-        window.Elfsight.config = {
-          widgets: {
-            reload: {
-              enable: true,
-              interval: 300000,
-              pauseOnHover: true
-            }
-          }
-        };
-        
-        // Forçar carregamento dos widgets
-        setTimeout(() => {
-          window.Elfsight.initializeWidgets();
-        }, 1500);
-      }
     });
 
     function showEmbed(id, element) {
@@ -357,13 +412,6 @@
       seeMoreLink.innerHTML = `Ver mais no ${element.textContent.trim()}`;
 
       currentEmbed = id;
-      
-      // Recarregar widgets quando alternar entre abas
-      if (window.Elfsight) {
-        setTimeout(() => {
-          window.Elfsight.initializeWidgets();
-        }, 300);
-      }
     }
 
     function showIntro(element) {
