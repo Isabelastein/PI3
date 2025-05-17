@@ -1,4 +1,6 @@
-Este repositório contém o projeto desenvolvido para o Projeto Integrador 3 (PI3) da UNIVESP – Bacharelado em Tecnologia da Informação. 
+# Projeto Integrador 3 (PI3) – UNIVESP
+
+Este repositório contém o projeto desenvolvido para o **Projeto Integrador 3 (PI3)** da **UNIVESP – Bacharelado em Tecnologia da Informação**
 
 Para rodar o projeto localmente, é necessário ter algumas ferramentas instaladas. Primeiro, é preciso instalar o Git, que permite clonar o repositório do GitHub. Basta acessar o site oficial (https://git-scm.com), fazer o download e instalar com as opções padrão. Após a instalação, é possível testar se deu certo abrindo o terminal e digitando git --version.
 
@@ -9,10 +11,6 @@ Embora opcional, recomenda-se instalar o Visual Studio Code, um editor de códig
 Com as ferramentas instaladas, abra o terminal e siga os seguintes comandos para rodar o projeto:
 
 Primeiro, clone o repositório com o comando git clone https://github.com/Isabelastein/PI3.git. Em seguida, entre na pasta clonada com cd PI3. Depois, execute o comando npm install para instalar as dependências necessárias. Por fim, rode a aplicação com node app.js. Com isso, o servidor será iniciado e o sistema estará disponível no navegador pelo endereço http://localhost:3000.
-
-# Projeto Integrador 3 (PI3) – UNIVESP
-
-Este repositório contém o projeto desenvolvido para o **Projeto Integrador 3 (PI3)** da **UNIVESP – Bacharelado em Tecnologia da Informação**.
 
 ## 💡 Sobre o Projeto
 
