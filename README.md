@@ -10,6 +10,28 @@ Com as ferramentas instaladas, abra o terminal e siga os seguintes comandos para
 
 Primeiro, clone o repositório com o comando git clone https://github.com/Isabelastein/PI3.git. Em seguida, entre na pasta clonada com cd PI3. Depois, execute o comando npm install para instalar as dependências necessárias. Por fim, rode a aplicação com node app.js. Com isso, o servidor será iniciado e o sistema estará disponível no navegador pelo endereço http://localhost:3000.
 
-A estrutura do projeto é simples e organizada: a pasta public/ contém os arquivos públicos como o index.html, responsável pela interface principal da aplicação. O arquivo app.js é o servidor principal da aplicação, onde as rotas e o funcionamento do backend são definidos. Já o arquivo package.json lista todas as dependências utilizadas no projeto, além de conter os scripts de execução. O .gitignore serve para evitar que pastas desnecessárias, como a node_modules, sejam enviadas ao GitHub, mantendo o repositório mais limpo.
+# Projeto Integrador 3 (PI3) – UNIVESP
 
-Este projeto está em construção contínua, podendo receber melhorias e novas funcionalidades. Para dúvidas, sugestões ou contribuições, sinta-se à vontade para entrar em contato ou abrir uma issue no repositório.
+Este repositório contém o projeto desenvolvido para o **Projeto Integrador 3 (PI3)** da **UNIVESP – Bacharelado em Tecnologia da Informação**.
+
+## 💡 Sobre o Projeto
+
+A proposta deste projeto é desenvolver um **website interativo** que funcione como um canal oficial de comunicação de uma figura pública ou empreendedor. O objetivo é **centralizar informações** que hoje estão dispersas em diferentes redes sociais, facilitando o acesso e ampliando a presença digital.
+
+A ideia surgiu da necessidade de fortalecer a atuação digital de quem já está presente nas redes sociais, mas encontra dificuldades para reunir e divulgar seus conteúdos de forma estruturada. 
+
+## 🗂 Estrutura do Projeto
+
+A estrutura do projeto é simples, clara e organizada:
+
+- `public/`: Contém os arquivos públicos, incluindo:
+  - `index.html`: Interface principal do site
+  - `login.html`, `registro.html`, `app.html`: Outras interfaces da aplicação
+- `app.js`: Servidor principal responsável pelas rotas e funcionamento do backend.
+- `package.json`: Lista de dependências e scripts do projeto.
+- `.gitignore`: Arquivo para ignorar pastas como `node_modules/`, evitando poluir o repositório.
+
+## 🚧 Status do Projeto
+
+O projeto encontra-se **praticamente finalizado**, restando apenas sua publicação em ambiente de nuvem, conforme os requisitos de entrega do PI3.
+
