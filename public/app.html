@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App - A Voz dos Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lilita+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: hidden;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Lilita One', sans-serif;
+      background-color: #0a0a0a;
+      color: #fff;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+      padding: 30px 15px;
+      border-right: 4px solid #ff5500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .logo {
+      color: #ff5500;
+      font-family: 'Bungee', sans-serif;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .social-link {
+      color: #ff5500;
+      text-decoration: none;
+      padding: 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background-color: rgba(255, 85, 0, 0.1);
+      border: 1px solid rgba(255, 85, 0, 0.3);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover, .social-link.active {
+      background-color: rgba(255, 85, 0, 0.3);
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(255, 85, 0, 0.5);
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      background: rgba(255, 85, 0, 0.2);
+      color: #ff5500;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 85, 0, 0.3);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      margin-left: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+      width: calc(100% - 250px);
+      max-width: 100%;
+    }
+
+    .intro-content {
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: 'Bungee', sans-serif;
+      color: #ff5500;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    p {
+      color: #ddd;
+      font-size: 1.4rem;
+      margin-bottom: 25px;
+      line-height: 1.5;
+      width: 100%;
+    }
+
+    #media-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      height: auto;
+      overflow: hidden;
+    }
+
+    .embed-container {
+      width: 100%;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    /* Instagram - Embed Oficial */
+    .instagram-embed {
+      width: 100%;
+      max-width: 500px;
+      height: 600px;
+      border: none;
+      overflow: hidden;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border-left: 3px solid #ff5500;
+    }
+
+    /* Facebook - Mantido como estava */
+    #facebook-embed iframe {
+      width: 100% !important;
+      max-width: 500px;
+      height: 500px !important;
+      border: none;
+      background: transparent;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* YouTube - Solução Definitiva */
+    .youtube-alt-container {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      border-left: 3px solid #ff5500;
+    }
+    
+    .youtube-alt-image {
+      width: 100%;
+      max-height: 280px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      border: 2px solid #ff5500;
+      object-fit: cover;
+    }
+    
+    .youtube-alt-btn {
+      display: inline-block;
+      background: #ff0000;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-family: 'Lilita One', sans-serif;
+      font-size: 1.1rem;
+    }
+    
+    .youtube-alt-btn:hover {
+      background: #cc0000;
+      transform: translateY(-2px);
+    }
+    
+    .youtube-alt-btn i {
+      margin-right: 8px;
+    }
+
+    .buttons-container {
+      display: flex;
+      gap: 15px;
+      margin: 15px 0;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      font-size: 1.2rem;
+      background: rgba(255, 85, 0, 0.15);
+      border: 1px solid rgba(255, 85, 0, 0.3);
+      padding: 12px 24px;
+      border-radius: 6px;
+      color: #ff5500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: 'Lilita One', sans-serif;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 85, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+        border-bottom: 4px solid #ff5500;
+        border-right: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 15px;
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+      
+      p {
+        font-size: 1.2rem;
+      }
+
+      /* Instagram */
+      .instagram-embed {
+        height: 500px;
+      }
+
+      /* Facebook */
+      #facebook-embed iframe {
+        height: 400px !important;
+      }
+
+      /* YouTube */
+      .youtube-alt-container {
+        padding: 15px;
+      }
+      
+      .youtube-alt-image {
+        max-height: 180px;
+      }
+      
+      .youtube-alt-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+
+      .buttons-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <i class="fas fa-spinner fa-spin fa-3x" style="color: #ff5500;"></i>
+  </div>
+
+  <div class="sidebar">
+    <div class="logo">A Voz dos Eventos</div>
+    <div class="social-links">
+      <div class="social-link active" onclick="showIntro(this)"><i class="fas fa-home"></i> Início</div>
+      <div class="social-link" onclick="showEmbed('instagram', this)"><i class="fab fa-instagram"></i> Instagram</div>
+      <div class="social-link" onclick="showEmbed('facebook', this)"><i class="fab fa-facebook-f"></i> Facebook</div>
+      <div class="social-link" onclick="showEmbed('youtube', this)"><i class="fab fa-youtube"></i> YouTube</div>
+      <a href="https://reporteresemacao.com.br/" target="_blank" class="social-link"><i class="fas fa-globe"></i> Site</a>
+    </div>
+    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+  </div>
+
+  <div class="main-content" id="intro-text">
+    <div class="intro-content">
+      <h1>BEM VINDO(A)</h1>
+      
+      <p>Portal desenvolvido como Projeto Integrador para centralizar a comunicação digital <br>
+      integrando todas as redes sociais em uma única plataforma acessível.</p>
+      
+      <p>Aqui você pode acompanhar de forma fácil as últimas publicações<br>
+      e novidades das redes sociais oficiais do Reportéres em Ação!</p>
+      
+      <p>Navegue pelas redes sociais na barra lateral<br>
+      para acompanhar as últimas novidades.</p>
+    </div>
+  </div>
+
+  <div class="main-content" id="media-container">
+    <!-- Instagram - Embed Oficial -->
+    <div class="embed-container" id="instagram-embed">
+      <iframe class="instagram-embed" 
+              src="https://www.instagram.com/reporteresemacao/embed" 
+              allowtransparency="true" 
+              frameborder="0">
+      </iframe>
+    </div>
+    
+    <!-- Facebook - Mantido como estava -->
+    <div class="embed-container" id="facebook-embed">
+      <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FReporteres1&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" frameborder="0" scrolling="no" allowfullscreen></iframe>
+    </div>
+    
+    <!-- YouTube - Solução Definitiva com sua imagem -->
+    <div class="embed-container" id="youtube-embed">
+      <div class="youtube-alt-container">
+        <img src="https://yt3.googleusercontent.com/ijlNB-dfRHXlAN8wK1RKq5LO2Y9AG9tyNvATAHhUVZ-xNqDgl0mmmO8LWowGF-BVodQ9d7rNig=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" 
+             class="youtube-alt-image" 
+             onclick="window.open('https://www.youtube.com/@reporteresemacao6982/featured', '_blank')"
+             alt="Canal Reporteres em Ação no YouTube">
+        <a href="https://www.youtube.com/@reporteresemacao6982/featured" 
+           target="_blank" 
+           class="youtube-alt-btn">
+          <i class="fab fa-youtube"></i> Acessar Canal no YouTube
+        </a>
+        <p style="margin-top: 15px; color: #ddd;">Clique na imagem ou no botão para acessar o canal completo</p>
+      </div>
+    </div>
+
+    <div class="buttons-container">
+      <a href="https://www.instagram.com/reporteresemacao/" id="see-more-link" class="action-btn" target="_blank">Ver mais no Instagram</a>
+      <button class="action-btn" onclick="showIntro()">Voltar ao Início</button>
+    </div>
+  </div>
+
+  <script>
+    const seeMoreLinks = {
+      instagram: 'https://www.instagram.com/reporteresemacao/',
+      facebook: 'https://www.facebook.com/Reporteres1',
+      youtube: 'https://www.youtube.com/@reporteresemacao6982/featured'
+    };
+
+    let currentEmbed = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        // Redireciona para a página de login (index.html)
+        window.location.href = "index.html";
+        
+        // Opcional: Limpar dados de sessão/localStorage se necessário
+        // localStorage.removeItem('token');
+        // sessionStorage.clear();
+      });
+
+      setTimeout(() => {
+        document.querySelector('.loading').style.display = 'none';
+      }, 1000);
+    });
+
+    function showEmbed(id, element) {
+      document.getElementById('intro-text').style.display = 'none';
+      document.getElementById('media-container').style.display = 'flex';
+      document.querySelectorAll('.embed-container').forEach(el => el.style.display = 'none');
+      document.getElementById(id + '-embed').style.display = 'flex';
+      document.querySelectorAll('.social-link').forEach(el => el.classList.remove('active'));
+      if (element) element.classList.add('active');
+
+      const seeMoreLink = document.getElementById('see-more-link');
+      seeMoreLink.href = seeMoreLinks[id];
+      seeMoreLink.innerHTML = `Ver mais no ${element.textContent.trim()}`;
+
+      currentEmbed = id;
+    }
+
+    function showIntro(element) {
+      document.getElementById('intro-text').style.display = 'flex';
+      document.getElementById('media-container').style.display = 'none';
+      document.querySelectorAll('.social-link').forEach(el => el.classList.remove('active'));
+      if (element) element.classList.add('active');
+    }
+  </script>
+</body>
+</html>
