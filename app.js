@@ -1,38 +1,51 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 const session = require("express-session");
+const pgSession = require('connect-pg-simple')(session);
 
 const app = express();
-const port = 3000;
 
-// Configuração do PostgreSQL
+// ==================== CONFIGURAÇÃO DO BANCO ====================
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "PI3",
-  password: "isa",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL || "postgresql://postgres:isa@localhost:5432/PI3",
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Middlewares
+// ==================== MIDDLEWARES ====================
+// Novo: Middleware de log de requisições
+app.use((req, res, next) => {
+  console.log(`[${new Date().toLocaleString()}] ${req.ip} ${req.method} ${req.path}`);
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: false,
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 1 dia
-  }
-}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rotas HTML
+// ==================== CONFIGURAÇÃO DE SESSÃO ====================
+app.use(session({
+  store: new pgSession({
+    pool: pool,
+    tableName: 'sessoes_usuarios',
+    createTableIfMissing: true
+  }),
+  secret: process.env.SESSION_SECRET || 'segredo-temporario-dev',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: 'lax'
+  }
+}));
+
+// ==================== ROTAS ====================
+// Rotas de arquivos HTML
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -50,97 +63,109 @@ app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'app.html'));
 });
 
-// Verifica sessão
+// Rotas da API
 app.get("/isLoggedIn", (req, res) => {
   res.json({ loggedIn: !!req.session.userId });
 });
 
-// Cadastro
 app.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { nome, email, senha } = req.body;
   try {
-    const emailCheck = await pool.query("SELECT * FROM pi3 WHERE email = $1", [email]);
-    if (emailCheck.rows.length > 0) {
-      return res.status(400).json({ message: "E-mail já registrado." });
+    const verificaEmail = await pool.query("SELECT * FROM pi3 WHERE email = $1", [email]);
+    if (verificaEmail.rows.length > 0) {
+      return res.status(400).json({ mensagem: "E-mail já cadastrado." });
     }
 
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const senhaCriptografada = await bcrypt.hash(senha, salt);
 
-    const newUser = await pool.query(
-      "INSERT INTO pi3 (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email",
-      [name, email, hashedPassword]
+    const novoUsuario = await pool.query(
+      "INSERT INTO pi3 (nome, email, senha_hash) VALUES ($1, $2, $3) RETURNING id, nome, email",
+      [nome, email, senhaCriptografada]
     );
 
-    req.session.userId = newUser.rows[0].id;
+    req.session.userId = novoUsuario.rows[0].id;
     res.status(201).json({
-      message: "Cadastro realizado com sucesso!",
-      user: newUser.rows[0],
+      mensagem: "Cadastro realizado com sucesso!",
+      usuario: novoUsuario.rows[0],
       redirect: '/app'
     });
   } catch (err) {
     console.error("Erro no cadastro:", err);
-    res.status(500).json({ message: "Erro no servidor durante o cadastro." });
+    res.status(500).json({ mensagem: "Erro interno durante o cadastro." });
   }
 });
 
-// Login
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, senha } = req.body;
   try {
-    const user = await pool.query("SELECT * FROM pi3 WHERE email = $1", [email]);
-    if (user.rows.length === 0) {
-      return res.status(400).json({ message: "Credenciais inválidas." });
+    const usuario = await pool.query("SELECT * FROM pi3 WHERE email = $1", [email]);
+    if (usuario.rows.length === 0) {
+      return res.status(400).json({ mensagem: "E-mail ou senha incorretos." });
     }
 
-    const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
-    if (!validPassword) {
-      return res.status(400).json({ message: "Credenciais inválidas." });
+    const senhaValida = await bcrypt.compare(senha, usuario.rows[0].senha_hash);
+    if (!senhaValida) {
+      return res.status(400).json({ mensagem: "E-mail ou senha incorretos." });
     }
 
-    req.session.userId = user.rows[0].id;
+    req.session.userId = usuario.rows[0].id;
     res.status(200).json({
-      message: "Login realizado com sucesso!",
+      mensagem: "Login realizado com sucesso!",
       redirect: '/app'
     });
   } catch (err) {
     console.error("Erro no login:", err);
-    res.status(500).json({ message: "Erro no servidor durante o login." });
+    res.status(500).json({ mensagem: "Erro interno durante o login." });
   }
 });
 
-// Logout
 app.get("/logout", (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      console.error("Erro ao destruir sessão:", err);
-      return res.status(500).json({ message: "Erro ao sair." });
+      console.error("Erro ao encerrar sessão:", err);
+      return res.status(500).json({ mensagem: "Erro ao sair." });
     }
     res.clearCookie('connect.sid');
-    res.json({ message: "Logout efetuado.", redirect: '/' });
+    res.json({ mensagem: "Sessão encerrada com sucesso.", redirect: '/' });
   });
 });
 
-// Dados do usuário logado
 app.get("/user", async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Não autorizado" });
+    return res.status(401).json({ mensagem: "Acesso não autorizado" });
   }
 
   try {
-    const user = await pool.query(
-      "SELECT id, name, email FROM pi3 WHERE id = $1", 
+    const usuario = await pool.query(
+      "SELECT id, nome, email FROM pi3 WHERE id = $1", 
       [req.session.userId]
     );
-    res.json(user.rows[0]);
+    res.json(usuario.rows[0]);
   } catch (err) {
     console.error("Erro ao buscar usuário:", err);
-    res.status(500).json({ message: "Erro no servidor" });
+    res.status(500).json({ mensagem: "Erro interno no servidor" });
   }
 });
 
-// Inicia o servidor
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
-  console.log(`Banco de dados: ${pool.options.database}@${pool.options.host}`);
+// ==================== NOVO: MIDDLEWARE DE ERRO ====================
+app.use((err, req, res, next) => {
+  console.error('❌ Erro:', err.stack);
+  res.status(500).json({ 
+    mensagem: "Ocorreu um erro inesperado",
+    ...(process.env.NODE_ENV === 'development' && { detalhes: err.message })
+  });
+});
+
+// ==================== INICIALIZAÇÃO ====================
+const PORTA = process.env.PORT || 3000;
+app.listen(PORTA, '0.0.0.0', () => {
+  console.log(`
+  ==========================================
+  🚀 Servidor rodando na porta ${PORTA}
+  🔧 Modo: ${process.env.NODE_ENV || 'desenvolvimento'}
+  🗄️ Banco: ${process.env.DATABASE_URL ? 'Railway' : 'Local'}
+  🔒 Sessões: ${process.env.SESSION_SECRET ? 'Protegidas' : 'Modo desenvolvimento'}
+  ==========================================
+  `);
 });
