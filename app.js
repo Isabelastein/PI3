@@ -12,17 +12,17 @@ const app = express();
 // ==================== CONFIGURAÇÃO DO BANCO ====================
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: { rejectUnauthorized: false } // SEMPRE ativo no Railway
 });
 
-// Verificação inicial da conexão (opcional)
-pool.query('SELECT NOW()')
-  .then(() => console.log('✅ Conexão com o banco estabelecida'))
-  .catch(err => console.error('❌ Falha na conexão:', err));
-
-// ==================== CRIAÇÃO DA TABELA DE SESSÕES ====================
+// Verificação inicial da conexão e criação de tabelas
 (async () => {
   try {
+    // Verifica conexão
+    await pool.query('SELECT NOW()');
+    console.log('✅ Conexão com o banco estabelecida');
+
+    // Cria tabela de sessões
     await pool.query(`
       CREATE TABLE IF NOT EXISTS sessoes_usuarios (
         "sid" varchar NOT NULL PRIMARY KEY,
@@ -31,8 +31,20 @@ pool.query('SELECT NOW()')
       );
     `);
     console.log('✔ Tabela de sessões verificada/criada');
+
+    // Cria tabela pi3 (usuários)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS pi3 (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password_hash VARCHAR(100) NOT NULL
+      );
+    `);
+    console.log('✔ Tabela pi3 (usuários) verificada/criada');
+
   } catch (err) {
-    console.error('Erro ao criar tabela de sessões:', err);
+    console.error('❌ Erro na inicialização do banco:', err);
   }
 })();
 
@@ -53,7 +65,7 @@ app.use(session({
     tableName: 'sessoes_usuarios',
     createTableIfMissing: false
   }),
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'segredo-desenvolvimento',
   resave: false,
   saveUninitialized: false,
   cookie: {
