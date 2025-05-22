@@ -12,7 +12,10 @@ const app = express();
 // ==================== CONFIGURAÇÃO DO BANCO ====================
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // SEMPRE ativo no Railway
+  ssl: {
+    rejectUnauthorized: false,
+    sslmode: 'require'
+  }
 });
 
 // Verificação inicial da conexão e criação de tabelas
@@ -45,6 +48,7 @@ const pool = new Pool({
 
   } catch (err) {
     console.error('❌ Erro na inicialização do banco:', err);
+    process.exit(1); // Encerra o app se não conectar ao banco
   }
 })();
 
@@ -63,7 +67,7 @@ app.use(session({
   store: new pgSession({
     pool: pool,
     tableName: 'sessoes_usuarios',
-    createTableIfMissing: false
+    createTableIfMissing: true
   }),
   secret: process.env.SESSION_SECRET || 'segredo-desenvolvimento',
   resave: false,
@@ -199,7 +203,7 @@ app.use((err, req, res, next) => {
 
 // ==================== INICIALIZAÇÃO ====================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`
   ==========================================
   🚀 Servidor rodando na porta ${PORT}
