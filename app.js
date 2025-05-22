@@ -12,9 +12,9 @@ const app = express();
 // ==================== CONFIGURAÇÃO DO BANCO ====================
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
+  ssl: { 
     rejectUnauthorized: false,
-    sslmode: 'require'
+    sslmode: 'require'  // Adicione esta linha
   }
 });
 
